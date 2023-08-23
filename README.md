@@ -1,2 +1,3 @@
 # PlantCV_Workflows
-Code Repository for the plantcv workflows of the Shakoor Lab
+
+Code repository for the PlantCv workflows of the Shakoor Lab
