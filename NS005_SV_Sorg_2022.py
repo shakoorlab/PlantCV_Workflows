@@ -137,7 +137,7 @@ roi_objects_ab, hierarchy_ab, kept_mask_ab, obj_area_ab = pcv.roi_objects(img=co
 
 if obj_area_ab > 4:
     #combine kept objects
-    obj_combined_ab, thresh1_filled_holes = pcv.object_composition(img=color_corrected_img, contours=roi_objects_ab, hierarchy=hierarchy_ab)
+    obj_combined_ab, kept_mask_ab = pcv.object_composition(img=color_corrected_img, contours=roi_objects_ab, hierarchy=hierarchy_ab)
 
     # Find shape properties, data gets stored to an Outputs class automatically
     analysis_image = pcv.analyze_object(img=color_corrected_img, obj=obj_combined_ab, mask=kept_mask_ab, label="default")
