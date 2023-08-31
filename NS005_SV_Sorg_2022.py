@@ -94,34 +94,23 @@ target_matrix = pcv.transform.load_matrix(filename='/shares/nshakoor_share/users
 color_corrected_img = affine_color_correction(plant_logv, source_matrix, target_matrix)
 
 
-#box on right 
-box_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=color_corrected_img, p1=(2020,2696), p2=(3300,2), color = "white")
-
-#creating box on left 
-box_left_and_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=box_right_img, p1=(0,2688), p2=(570,2), color = "white")
-
-
-#color_scatter = pcv.visualize.pixel_scatter_plot(paths_to_imgs = ["./color_corrected_img.png"] , x_channel = "a", y_channel ="b" )
-
-
 #B channel was originally 100,80 130,160
 
-thresh1 = pcv.threshold.dual_channels(rgb_img = box_left_and_right_img, x_channel = "a", y_channel = "b", points = [(105,130),(125,150)], above=True, max_value=255)
-
+thresh1 = pcv.threshold.dual_channels(rgb_img = color_corrected_img, x_channel = "a", y_channel = "b", points = [(90,130),(125,150)], above=True, max_value=255)
 
 
 #get rid of noise
-#thresh1_fill = pcv.fill(bin_img=thresh1, size=500)
+thresh1_fill = pcv.fill(bin_img=thresh1, size=2)
 
 
 
 # Fill in small objects #does not even take a sizing parameter #obviouspepper
-thresh1_filled_holes = pcv.closing(gray_img=thresh1)
+thresh1_filled_holes = pcv.closing(gray_img=thresh1_fill)
 
 # use erode function here
-er_img = pcv.erode(gray_img=thresh1_filled_holes, ksize=2, i=1)
+#er_img = pcv.erode(gray_img=thresh1_filled_holes, ksize=2, i=1)
 
-id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask=er_img)
+id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask=thresh1_filled_holes)
 
 
 
