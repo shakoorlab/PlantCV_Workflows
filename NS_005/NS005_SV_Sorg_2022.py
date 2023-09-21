@@ -114,7 +114,7 @@ id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask
 
 
 
-roi_ab, roi_hierarchy_ab= pcv.roi.rectangle(img=color_corrected_img, x=700, y=430, h=900, w=1060)
+roi_ab, roi_hierarchy_ab= pcv.roi.rectangle(img=color_corrected_img, x=600, y=432, h=900, w=1290)
 
 
 roi_objects_ab, hierarchy_ab, kept_mask_ab, obj_area_ab = pcv.roi_objects(img=color_corrected_img, roi_contour=roi_ab, 
