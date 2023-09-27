@@ -111,12 +111,12 @@ thresh1 = pcv.threshold.dual_channels(rgb_img = box_left_and_right_img, x_channe
 
 
 #get rid of noise
-#thresh1_fill = pcv.fill(bin_img=thresh1, size=500)
+thresh1_fill = pcv.fill(bin_img=thresh1, size=3.5)
 
 
 
 # Fill in small objects #does not even take a sizing parameter #obviouspepper
-thresh1_filled_holes = pcv.closing(gray_img=thresh1)
+thresh1_filled_holes = pcv.closing(gray_img=thresh1_fill)
 
 # use erode function here
 # er_img = pcv.erode(gray_img=thresh1_filled_holes, ksize=2, i=1)
