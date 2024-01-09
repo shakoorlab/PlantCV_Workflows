@@ -96,7 +96,7 @@ color_corrected_img = affine_color_correction(plant_logv, source_matrix, target_
 
 #B channel was originally 100,80 130,160
 
-thresh1 = pcv.threshold.dual_channels(rgb_img = box_left_and_right_img, x_channel = "a", y_channel = "b", points = [(90,130),(125,150)], above=True, max_value=255)
+thresh1 = pcv.threshold.dual_channels(rgb_img = color_corrected_img, x_channel = "a", y_channel = "b", points = [(90,130),(125,150)], above=True, max_value=255)
 
 
 
