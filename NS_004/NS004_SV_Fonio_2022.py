@@ -94,19 +94,9 @@ target_matrix = pcv.transform.load_matrix(filename='/shares/nshakoor_share/users
 color_corrected_img = affine_color_correction(plant_logv, source_matrix, target_matrix)
 
 
-#box on right 
-box_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=color_corrected_img, p1=(2020,2696), p2=(3300,2), color = "white")
-
-#creating box on left 
-box_left_and_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=box_right_img, p1=(0,2688), p2=(570,2), color = "white")
-
-
-#color_scatter = pcv.visualize.pixel_scatter_plot(paths_to_imgs = ["./color_corrected_img.png"] , x_channel = "a", y_channel ="b" )
-
-
 #B channel was originally 100,80 130,160
 
-thresh1 = pcv.threshold.dual_channels(rgb_img = box_left_and_right_img, x_channel = "a", y_channel = "b", points = [(108,138),(125,145)], above=True, max_value=255)
+thresh1 = pcv.threshold.dual_channels(rgb_img = box_left_and_right_img, x_channel = "a", y_channel = "b", points = [(90,130),(125,150)], above=True, max_value=255)
 
 
 
@@ -125,7 +115,7 @@ id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask
 
 
 
-roi_ab, roi_hierarchy_ab= pcv.roi.rectangle(img=color_corrected_img, x=620, y=135, h=1200, w=1210)
+roi_ab, roi_hierarchy_ab= pcv.roi.rectangle(img=color_corrected_img, x=480, y=82, h=1250, w=1500)
 
 
 roi_objects_ab, hierarchy_ab, kept_mask_ab, obj_area_ab = pcv.roi_objects(img=color_corrected_img, roi_contour=roi_ab, 
