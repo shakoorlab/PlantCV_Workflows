@@ -66,8 +66,9 @@ target_matrix = pcv.transform.load_matrix(filename='/shares/nshakoor_share/users
 
 color_corrected_img = affine_color_correction(plant_logv, source_matrix, target_matrix)
 
+box_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=color_corrected_img, p1=(3200,2696), p2=(3223,2), color = "white")
 
-thresh1 = pcv.threshold.dual_channels(rgb_img = color_corrected_img, x_channel = "a", y_channel = "b", points = [(90,130),(131,146)], above=True, max_value=255)
+thresh1 = pcv.threshold.dual_channels(rgb_img = box_right_img, x_channel = "a", y_channel = "b", points = [(90,130),(131,146)], above=True, max_value=255)
 
 
 thresh1_fill = pcv.fill(bin_img=thresh1, size=3.5)
@@ -79,10 +80,10 @@ thresh1_filled_holes = pcv.closing(gray_img=thresh1_fill)
 
 er_img = pcv.erode(gray_img=thresh1_filled_holes, ksize=4, i=1)
 
-box_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=er_img, p1=(3200,2696), p2=(3223,2), color = "white")
 
 
-id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask=box_right_img)
+
+id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask=er_img)
 
 
 roi_ab, roi_hierarchy_ab= pcv.roi.rectangle(img=color_corrected_img, x=1094, y=100, h=1872, w=1700)
