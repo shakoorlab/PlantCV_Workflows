@@ -1,11 +1,11 @@
-
 from plantcv import plantcv as pcv
 import matplotlib
 import cv2
 import numpy as np
-import argparse
+import argparse 
 from  matplotlib import pyplot as plt
 import os
+from skimage import exposure, img_as_float
 from plantcv.parallel import workflow_inputs
 import datetime
 
@@ -22,7 +22,7 @@ pcv.params.debug = args.debug     # Replace the hard-coded debug with the debug 
 img, path, filename = pcv.readimage(filename=args.image1)
 filename = os.path.split(args.image1)[1]
 
-#define new color correct function for logv images
+
 def affine_color_correction(img, source_matrix, target_matrix):
     h,w,c = img.shape
     n = source_matrix.shape[0]
@@ -48,48 +48,47 @@ def affine_color_correction(img, source_matrix, target_matrix):
     
     return img_cc
 
-#log correct the plant image  #for 2023 cut out everything to right of '=' and replace it with 'img' so plact_logv = img 
-plant_logv = img  
+
+plant_logv = img
 
 
-#define the color card dataframe for the image you are playing with
 dataframe2, start2, space2 = pcv.transform.find_color_card(rgb_img=plant_logv, background='light')
 
-#make a color card mask for your image that you are playing with here
+
 
 source_mask = pcv.transform.create_color_card_mask(plant_logv, radius=10, start_coord=start2, 
                                                    spacing=space2, nrows=4, ncols=6)
 
-#make color card matrix for image you are playing with
+
 headers, source_matrix = pcv.transform.get_color_matrix(rgb_img=plant_logv, mask=source_mask)
 
-#load the color card values that they should be
+
+
 target_matrix = pcv.transform.load_matrix(filename='/shares/nshakoor_share/users/jstanton/phenotyper_data/2022/x-rite_color_matrix_k2.npz')
 
 color_corrected_img = affine_color_correction(plant_logv, source_matrix, target_matrix)
 
+box_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=color_corrected_img, p1=(3200,2696), p2=(3223,2), color = "white")
 
-#box on right 
-box_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=color_corrected_img, p1=(3050,2696), p2=(3300,2), color = "white")
-
-#creating box on left 
-box_left_and_right_img, binary, contours, hierarchy = pcv.rectangle_mask(img=box_right_img, p1=(770,2688), p2=(912,2), color = "white")
-
-thresh1 = pcv.threshold.dual_channels(rgb_img = box_left_and_right_img, x_channel = "a", y_channel = "b", points = [(105,130),(130,140)], above=True, max_value=255)
+thresh1 = pcv.threshold.dual_channels(rgb_img = box_right_img, x_channel = "a", y_channel = "b", points = [(90,130),(131,146)], above=True, max_value=255)
 
 
-#get rid of noise
-thresh1_fill = pcv.fill(bin_img=thresh1, size=2000)
+thresh1_fill = pcv.fill(bin_img=thresh1, size=3.5)
 
 
-# Fill in small objects #does not even take a sizing parameter #obviouspepper
+
 thresh1_filled_holes = pcv.closing(gray_img=thresh1_fill)
 
 
-id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask=thresh1_filled_holes)
+er_img = pcv.erode(gray_img=thresh1_filled_holes, ksize=4, i=1)
 
 
-roi_ab, roi_hierarchy_ab= pcv.roi.rectangle(img=color_corrected_img, x=1250, y=700, h=1275, w=1700)
+
+id_objects_ab, obj_hierarchy_ab = pcv.find_objects(img=color_corrected_img, mask=er_img)
+
+
+roi_ab, roi_hierarchy_ab= pcv.roi.rectangle(img=color_corrected_img, x=1094, y=100, h=1872, w=1700)
+
 
 
 roi_objects_ab, hierarchy_ab, kept_mask_ab, obj_area_ab = pcv.roi_objects(img=color_corrected_img, roi_contour=roi_ab, 
@@ -98,6 +97,7 @@ roi_objects_ab, hierarchy_ab, kept_mask_ab, obj_area_ab = pcv.roi_objects(img=co
                                                                obj_hierarchy=obj_hierarchy_ab,
                                                                roi_type='partial')
 
+
 if obj_area_ab > 4:
     #combine kept objects
     obj_combined_ab, kept_mask_ab = pcv.object_composition(img=color_corrected_img, contours=roi_objects_ab, hierarchy=hierarchy_ab)
@@ -105,7 +105,10 @@ if obj_area_ab > 4:
     # Find shape properties, data gets stored to an Outputs class automatically
     analysis_image = pcv.analyze_object(img=color_corrected_img, obj=obj_combined_ab, mask=kept_mask_ab, label="default")
     boundary_image = pcv.analyze_bound_horizontal(img=color_corrected_img, obj=obj_combined_ab, mask=kept_mask_ab, 
-                                               line_position=1980, label="default")
+                                               line_position=1982, label="default")
+    #pcv.print_image(analysis_image, filename = "test_2.png")
+
+
 
 # Determine color properties
     color_histogram = pcv.analyze_color(rgb_img=color_corrected_img, mask=kept_mask_ab, colorspaces='all', label="default")
@@ -114,13 +117,7 @@ if obj_area_ab > 4:
 
     pcv.outputs.save_results(filename=args.result)
 
-
-
 end = datetime.datetime.now()
 duration = end - start
 print(f"{args.image1}: {duration.seconds}")
-
-
-
-
 
