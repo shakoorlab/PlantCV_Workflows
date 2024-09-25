@@ -10,8 +10,8 @@ The Bellwether Facility provides high capacity, high-throughput phenotyping in a
 
 ## Examples using Sorghum
 
-![Analysis Image](../PlantCV_Workflows//NS_009/analysis_image.png)
-![Boundary Image](../PlantCV_Workflows//NS_009/boundary_image.png)
+![Analysis Image](https://github.com/shakoorlab/PlantCV_Workflows/blob/main/NS_009/analysis_image.png)
+![Boundary Image](https://github.com/shakoorlab/PlantCV_Workflows/blob/main/NS_009/boundary_image.png)
 
 ## Examples using Fonio
 
