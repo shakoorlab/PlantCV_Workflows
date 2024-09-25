@@ -1,6 +1,6 @@
 # Using PlantCV to Phenotype Sorghum and Fonio
 
-This is a code repository for different image analysis techniques of our NS_001-NS_009 trials using Donald Danforth's in house created software, called PlantCV. PlantCV is an open-source image analysis software package, specifically for plant science. The Shakoor Lab uses PlantCV to measure plant traits (aka phenotypes) from images. You can find more information about PlantCV here: https://plantcv.org/
+This is a code repository for different image analysis techniques of our NS001-NS009 trials using Donald Danforth's in house created software, called PlantCV. PlantCV is an open-source image analysis software package, specifically for plant science. The Shakoor Lab uses PlantCV to measure plant traits (aka phenotypes) from images. You can find more information about PlantCV here: https://plantcv.org/
 
 # Image Analysis
 
