@@ -15,5 +15,5 @@ The Bellwether Facility provides high capacity, high-throughput phenotyping in a
 
 ## Examples using Fonio
 
-![Analysis Image](../PlantCV_Workflows//NS_004/analysis_image.png)
-![Boundary Image](../PlantCV_Workflows//NS_004/analysis_image.png)
+![Analysis Image](https://github.com/shakoorlab/PlantCV_Workflows/blob/main/NS_004/analysis_image.png)
+![Boundary Image](https://github.com/shakoorlab/PlantCV_Workflows/blob/main/NS_004/boundary_image.png)
